@@ -75,7 +75,7 @@ Define the tab sets in a helper method:
     
     def project_tabs
       tab_set = TabNav::TabSet.new(self, :name => :project) do |ts|
-        ts.add :detail, project_url(@project)'
+        ts.add :detail, project_url(@project)
         ts.add :milestones, project_milestones_url(@project)
         ts.add :bugs, project_bugs_url(@project)
       end
