@@ -1,13 +1,115 @@
-TabNavHelper
-============
+= TabNavHelper
 
-Introduction goes here.
+Yet another Rails plugin for tabbed navigation. There are other 
+plugins that do similar things, and I was inspired by some of them:
+
+* tabs_on_rails[http://github.com/weppos/tabs_on_rails]
+* navigation_helper[http://github.com/rpheath/navigation_helper]
+* Tabnav[http://blog.seesaw.it/articles/2006/07/23/the-easiest-way-to-add-tabbed-navigation-to-your-rails-app]
+
+(If you have a similar plugin and want to get added to the list let me know.)
+
+The approach with tab_nav_helper is a more object-oriented one with tabs
+produced in (Ruby) code rather than using tags and helpers in views.  YMMV.
 
 
-Example
-=======
+== Introduction
 
-Example goes here.
+Define the tab set in a helper method:
+
+  # app/helpers/application_helper
+  
+  module ApplicationHelper
+  
+    def nav_tabs
+      tab_set = TabNav::TabSet.new(self) do |ts|
+        ts.add :home, '/home'
+        ts.add :project, '/projects'
+        ts.add :about, '/about'
+      end
+      tab_set.html
+    end
+    
+  end
+  
+Set the current tab in your controller:
+
+  class HomeController < ApplicationController  
+    current_tab :home
+    
+    #...
+  end
+  
+Call the helper method from your view, or more likely a layout:
+
+  # app/views/home/index.html
+  
+  <%= nav_tabs %>
+  
+
+The generated html:
+
+  <ul class="tab-set" id="tab-set-default">
+    <li class="tab-item-current" id="tab-home"><span>Home</span></li>
+    <li id="tab-project"><a href="/projects">Project</a></li>
+    <li id="tab-about"><a href="/about">About</a></li>
+  </ul>
+
+== Multiple Sets of Tabs
+
+If you have multiple sets of tabs you need to name the tab sets when you create
+them and specify the name when setting current tab.
+
+Define the tab sets in a helper method:
+
+  module ApplicationHelper
+  
+    def main_tabs
+      tab_set = TabNav::TabSet.new(self, :name => :main) do |ts|
+        ts.add :home, '/home'
+        ts.add :project, '/projects'
+        ts.add :about, '/about'
+      end
+      tab_set.html
+    end
+    
+    def project_tabs
+      tab_set = TabNav::TabSet.new(self, :name => :project) do |ts|
+        ts.add :detail, project_url(@project)'
+        ts.add :milestones, project_milestones_url(@project)
+        ts.add :bugs, project_bugs_url(@project)
+      end
+      tab_set.html
+    end
+    
+  end
+  
+Set the current tab for each tab set in your controller:
+
+  class Projectsontroller < ApplicationController  
+    current_tab :main, :project
+    
+    def detail
+      current_tab :project, :detail
+    end
+    
+    def milestones
+      current_tab :project, :milestones
+    end
+    
+    def bugs
+      current_tab :project, :bugs
+    end
+  end
+
+Call the helper methods from your view / layout
+
+    # app/views/layouts/project_layout.html.erb
+
+    <%= main_tabs %>
+    <%= @project.name %>
+    <%= project_tabs %>
 
 
-Copyright (c) 2010 [name of plugin creator], released under the MIT license
+== Copyright
+Copyright (c) 2010 Steve Downey, released under the MIT license

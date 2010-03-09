@@ -53,7 +53,6 @@ module TabNav #:nodoc:
       # Set current tab at the action level.
       #
       # The first call sequence is used when you only have one tab set on your page.
-      # If you have multiple tab sets then you need to set the current tab for each one.
       #
       #   class HomeController < ActionController::Base
       #
@@ -62,6 +61,23 @@ module TabNav #:nodoc:
       #     end
       #
       #   end
+      #
+      # If you have multiple tab sets on a page then you need specify names when
+      # you create your tab sets and use the second calling sequence to specify the
+      # name when setting current tab.
+      #
+      #   class ProjectsController < ActionController::Base
+      #
+      #     def show
+      #       current_tab :project_nav, :detail
+      #     end
+      #
+      #     def tasks
+      #       current_tab :project_nav, :tasks
+      #     end
+      #
+      #   end
+      #
       def current_tab(*args)
         if args.length == 1
           tab_set_name = :default
@@ -82,7 +98,8 @@ module TabNav #:nodoc:
       #   current_tab(:main, :bar)
       #   current_tabs              #=> {:default => :foo, :main_nav => :bar}
       #   
-      # This is available as a +helper_method+ in views and helpers.
+      # In the normal use of tab_nav_helper you probably won't need this, but
+      # it's there if you do and is available as a +helper_method+ in views and helpers.
       def current_tabs
         @current_tabs ||= {}
       end

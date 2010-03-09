@@ -25,12 +25,11 @@ describe TabNav::Tab do
   end
   
   it "default class" do
-    @tab_item.css_class.should == 'tab-item'
+    @tab_item.css_class.should be_nil
   end
   
   it "should add classes" do
-    TabNav::Tab.new(:home, '/home', :css_class => 'foo').css_class.should == 'tab-item foo'
-    TabNav::Tab.new(:home, '/home', :css_class => %w(foo bar)).css_class.should == 'tab-item foo bar'
+    TabNav::Tab.new(:home, '/home', :css_class => 'foo').css_class.should == 'foo'
   end
   
   it "default dom id" do
@@ -41,11 +40,25 @@ describe TabNav::Tab do
     TabNav::Tab.new(:home, '/home', :dom_id => 'foo').dom_id.should == 'foo'
   end
   
+  it "should default title" do
+    @tab_item.stub!(:current?).and_return(false)
+    @tab_item.title.should == 'Go to: /home'
+    @tab_item.stub!(:current?).and_return(true)
+    @tab_item.title.should == 'You are at: /home'
+  end
+  
   describe 'html' do
     
-    it "should html" do
-      @tab_item.tab_set = TabNav::TabSet.new(@template, :name)
-      @tab_item.html.should == %(<li class="tab-item" id="tab-home"><a href="/home">Home</a></li>)
+    it "not current tab" do
+      @template.stub!(:current_tabs).and_return({})
+      @tab_item.tab_set = TabNav::TabSet.new(@template)
+      @tab_item.html.should == %(<li id="tab-home" title="Go to: /home"><a href="/home">Home</a></li>)
+    end
+    
+    it "current tab" do
+      @template.stub!(:current_tabs).and_return({:default => :home})
+      @tab_item.tab_set = TabNav::TabSet.new(@template)
+      @tab_item.html.should == %(<li class="tab-item-current" id="tab-home" title="You are at: /home"><span>Home</span></li>)
     end
     
   end
