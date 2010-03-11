@@ -1,1 +1,1 @@
-# Install hook code here
+puts %(run "script/generate tab_nav" to install some basic stylesheets)

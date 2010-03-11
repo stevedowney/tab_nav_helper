@@ -1,0 +1,8 @@
+Description:
+    Copies sample stylesheets to public/stylesheets/tab_nav
+
+Example:
+    ./script/generate tab_nav
+
+    This will create:
+        public/stylesheets/tab_nav/*.css

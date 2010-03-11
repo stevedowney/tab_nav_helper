@@ -79,7 +79,11 @@ module TabNav #:nodoc:
     end
     
     def html_content #:nodoc:
-      current? ? content_tag(:span, label) : link_to(label, url)
+      if current? && display_current_tab_as_text? 
+        content_tag(:span, label)
+      else
+        link_to(label, url)
+      end
     end
     
     def html_li_class #:nodoc:

@@ -12,6 +12,15 @@ plugins that do similar things, and I was inspired by some of them:
 The approach with tab_nav_helper is a more object-oriented one with tabs
 produced in (Ruby) code rather than using tags and helpers in views.  YMMV.
 
+== Installation
+
+  script/plugin install git://github.com/stevedowney/tab_nav_helper.git
+
+Get started with some basic stylesheets:
+
+  script/generate tab_nav
+  
+Go to Listamatic[http://css.maxdesign.com.au/listamatic/] for more examples.
 
 == Introduction
 
@@ -40,9 +49,11 @@ Set the current tab in your controller:
     #...
   end
   
-Call the helper method from your view, or more likely a layout:
+Call the helper method from your view, or more likely a layout (don't forget the stylesheet):
 
   # app/views/home/index.html
+  
+  <%= stylesheet_link_tag 'tab_nav/default.css'%>
   
   <%= nav_tabs %>
   
@@ -102,10 +113,12 @@ Set the current tab for each tab set in your controller:
     end
   end
 
-Call the helper methods from your view / layout
+Call the helper methods from your view / layout and include the stylesheet:
 
     # app/views/layouts/project_layout.html.erb
 
+    <%= stylesheet_link_tag 'tab_nav/default.css'%>
+    
     <%= main_tabs %>
     <%= @project.name %>
     <%= project_tabs %>

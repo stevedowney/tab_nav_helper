@@ -1,0 +1,34 @@
+ul.tab-set {
+  padding-left: 0;
+  margin-left: 0;
+  background-color: #036;
+  color: White;
+  float: left;
+  width: 100%;
+  font-family: arial, helvetica, sans-serif;
+}
+
+ul.tab-set li { display: inline; }
+
+ul.tab-set li a {
+  padding: 0.2em 1em;
+  background-color: #036;
+  color: White;
+  text-decoration: none;
+  float: left;
+  border-right: 1px solid #fff;
+}
+
+ul.tab-set li.tab-item-current a, ul.tab-set li.tab-item-current span {
+  padding: 0.2em 1em;
+  background-color: #369;
+  color: White;
+  text-decoration: none;
+  float: left;
+  border-right: 1px solid #fff;
+}
+
+ul.tab-set li a:hover {
+  background-color: #369;
+  color: #fff;
+}

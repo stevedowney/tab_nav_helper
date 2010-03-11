@@ -19,6 +19,14 @@ module TabNav #:nodoc:
     #
     #   tab_nav = TabNav::TabSet.new(self)
     #
+    #   # add a TabNav::Tab instance
+    #
+    #   tab_nav.add(TabNav::Tab(:home, "/home"))
+    #
+    #   # pass TabNav::Tab#new()'s arguments to TabNav::TabSet#add():
+    #
+    #   tab_nav.add(:about, "/about")
+    #
     # Attach Tab's in contructor:
     #
     #   tabs = [
@@ -36,17 +44,22 @@ module TabNav #:nodoc:
     #
     # === Options
     # * :name - defaults to <tt>:default</tt>
-    # * :tabs - an Array of Tabs
+    # * :tabs - an Array of TabNav::Tabs
     # * :css_class - "class" attribute on <ul> tag; defaults to "tab-set" -- anything
     #   you pass will be _added_ to the default class
     # * :dom_id - "id" attribute on <ul> tag; defaults to "tab-set-<name>"
+    # * :display_current_tab_as_text - default is +false+.  If set to +true+ then the
+    #   current tab is rendered as text rather than as a link.
     def initialize(template, options = {}, &block)
       raise(ArgumentError, "Expected ActionView::Base, got #{template.class}") unless template.is_a?(ActionView::Base)
       @template = template
       @name = options.delete(:name) || :default
-      @options = options
       tabs = options.delete(:tabs) || []
       tabs.each { |tab| add(tab) }
+      @css_class = options.delete(:css_class) || 'tab-set'
+      @dom_id = options.delete(:dom_id) || "tab-set-#{name}"
+      @display_current_tab_as_text = options.delete(:display_current_tab_as_text)
+      raise(ArgumentError, "Unknown option(s) passed: #{options.inspect}") unless options.blank?
       yield self if block_given?
     end
     
@@ -91,11 +104,15 @@ module TabNav #:nodoc:
     end
     
     def css_class #:nodoc:
-      ['tab-set', options[:css_class]].flatten.compact.join(' ')
+      @css_class
     end
     
     def dom_id #:nodoc:
-      options[:dom_id] || "tab-set-#{name}"
+      @dom_id
+    end
+    
+    def display_current_tab_as_text? #:nodoc:
+      @display_current_tab_as_text
     end
     
     # Returns the html for this tab set as an unordered list; example assumes 

@@ -55,10 +55,18 @@ describe TabNav::Tab do
       @tab_item.html.should == %(<li id="tab-home" title="Go to: /home"><a href="/home">Home</a></li>)
     end
     
-    it "current tab" do
+    it "current tab as link" do
       @template.stub!(:current_tabs).and_return({:default => :home})
       @tab_item.tab_set = TabNav::TabSet.new(@template)
-      @tab_item.html.should == %(<li class="tab-item-current" id="tab-home" title="You are at: /home"><span>Home</span></li>)
+      expected = %(<li class="tab-item-current" id="tab-home" title="You are at: /home"><a href="/home">Home</a></li>)
+      @tab_item.html.should == expected
+    end
+
+    it "current tab as text" do
+      @template.stub!(:current_tabs).and_return({:default => :home})
+      @tab_item.tab_set = TabNav::TabSet.new(@template, :display_current_tab_as_text => true)
+      expected =  %(<li class="tab-item-current" id="tab-home" title="You are at: /home"><span>Home</span></li>)
+      @tab_item.html.should == expected
     end
     
   end

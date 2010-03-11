@@ -34,9 +34,17 @@ describe TabNav::TabSet do
       @tab_set.dom_id.should == 'tab-set-default'
     end
     
+    it "should return display_current_tab_as_text" do
+      @tab_set.display_current_tab_as_text?.should be_nil
+    end
+    
     it "should return html" do
       html = @tab_set.html
       html.should == %(<ul class="tab-set" id="tab-set-default"></ul>)
+    end
+    
+    it "should raise error on unknown option" do
+      lambda { TabNav::TabSet.new(@template, :bad => :arg) }.should raise_error(ArgumentError)
     end
   end
   
@@ -47,7 +55,8 @@ describe TabNav::TabSet do
         :name => :main,
         :tabs => [@tab_item],
         :css_class => 'my-class',
-        :dom_id => 'my-id'
+        :dom_id => 'my-id',
+        :display_current_tab_as_text => true
       )
     end
   
@@ -64,7 +73,7 @@ describe TabNav::TabSet do
     end
   
     it "should set css class" do
-      @tab_set.css_class.should == 'tab-set my-class'
+      @tab_set.css_class.should == 'my-class'
     end
     
     it "should set dom id" do
@@ -74,7 +83,7 @@ describe TabNav::TabSet do
     it "should return html" do
       @template.stub!(:current_tabs).and_return({})
       html = @tab_set.html
-      open_tag = %(<ul class="tab-set my-class" id="my-id">)
+      open_tag = %(<ul class="my-class" id="my-id">)
       tab_html = @tab_item.html
       
       html.should == "#{open_tag}#{tab_html}</ul>"
