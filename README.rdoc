@@ -123,6 +123,17 @@ Call the helper methods from your view / layout and include the stylesheet:
     <%= @project.name %>
     <%= project_tabs %>
 
+== Documentation
 
+Generate the RDoc for tab_nav_helper:
+
+  rake doc:plugins:tab_nav_helper
+  
+== RSpec
+
+Run rspec tests from <tt>vendor/plugins/tab_nav_helper</tt>:
+
+  rake spec
+  
 == Copyright
 Copyright (c) 2010 Steve Downey, released under the MIT license
